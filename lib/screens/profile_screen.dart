@@ -44,23 +44,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _updateProfile() async {
     try {
-      if (_image != null) {
+      if (_image != null && await _image!.exists() && _image!.lengthSync() > 0) {
         final storageRef = FirebaseStorage.instance.ref().child('profile_pictures/${_user.uid}');
         final uploadTask = storageRef.putFile(_image!);
         await uploadTask.whenComplete(() async {
           final imageUrl = await storageRef.getDownloadURL();
           await _user.updateProfile(displayName: _nameController.text, photoURL: imageUrl);
+          Fluttertoast.showToast(msg: 'Profile updated successfully');
         });
       } else {
         await _user.updateProfile(displayName: _nameController.text);
+        Fluttertoast.showToast(msg: 'Profile updated successfully');
       }
 
       await _user.updateEmail(_emailController.text);
-      Fluttertoast.showToast(msg: 'Profile updated successfully');
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Failed to update profile: $e');
+      if (e is FirebaseException && e.code == 'object-not-found') {
+        Fluttertoast.showToast(msg: 'Failed to update profile: File not found at the specified path.');
+      } else {
+        Fluttertoast.showToast(msg: 'Failed to update profile: $e');
+      }
     }
   }
+
 
   Future<void> _updatePassword() async {
     try {
@@ -105,10 +111,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 backgroundColor: Colors.grey.shade300,
                 backgroundImage: _image != null
                     ? FileImage(_image!)
-                    : (_user.photoURL != null
-                    ? NetworkImage(_user.photoURL!)
-                    : null) as ImageProvider,
-                child: _image == null
+                    : (_user.photoURL != null ? NetworkImage(_user.photoURL!) : null),
+                child: _image == null && _user.photoURL == null
                     ? const Icon(Icons.camera_alt, color: Colors.white, size: 50)
                     : null,
               ),

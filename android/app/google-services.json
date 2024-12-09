@@ -1,45 +1,27 @@
 {
   "project_info": {
-    "project_number": "359744860509",
-    "firebase_url": "https://blog-app-2b9dd-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "blog-app-2b9dd",
-    "storage_bucket": "blog-app-2b9dd.appspot.com"
+    "project_number": "887656484222",
+    "firebase_url": "https://ncrd-blog-app-default-rtdb.firebaseio.com",
+    "project_id": "ncrd-blog-app",
+    "storage_bucket": "ncrd-blog-app.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:359744860509:android:da0a27fbbc13e0d10e78b4",
+        "mobilesdk_app_id": "1:887656484222:android:26685e9067874517daf72f",
         "android_client_info": {
           "package_name": "com.example.blog"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "359744860509-rh3f4q5q6u43pqpip7uldtbml0k4ptc3.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.blog",
-            "certificate_hash": "14862706b607de580e78fdff94ec87440ce280ab"
-          }
-        },
-        {
-          "client_id": "359744860509-m7d9nfm44l10s7n83lhn19d8odhm4c8u.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCi8khDIy8TCeR7MjRx_5eT_msLRc2cQoY"
+          "current_key": "AIzaSyBzpjOoXleE74wD9gpMkcFA5DWBM0OAg_0"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "359744860509-m7d9nfm44l10s7n83lhn19d8odhm4c8u.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

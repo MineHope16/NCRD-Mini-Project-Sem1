@@ -7,6 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'option_screen.dart';
+
 class Signin extends StatefulWidget {
   const Signin({super.key});
 
@@ -56,134 +58,169 @@ class _SigninState extends State<Signin> {
     return ModalProgressHUD(
       inAsyncCall: showSpinner,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Create Account'),
-          backgroundColor: Colors.pinkAccent,
+        appBar: AppBar( leading: IconButton( icon: Icon(Icons.arrow_back), onPressed: () => Navigator.pushReplacement( context, MaterialPageRoute(builder: (context) => const OptionScreen()),), ), title: const Text('Blog App'), backgroundColor: Colors.pinkAccent,
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Register', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30),
-                child: Form(
-                  key: _formKey,
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/background.jpg'),
+                  fit: BoxFit.cover,
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Colors.white],
+                  stops: [0.7, 1],
+                ),
+              ),
+            ),
+            SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      TextFormField(
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          hintText: 'Email',
-                          labelText: 'Email',
-                          prefixIcon: Icon(Icons.email),
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (String value) {
-                          email = value;
-                        },
-                        validator: (value) {
-                          return value!.isEmpty ? 'Enter email' : null;
-                        },
+                      const SizedBox(height: 30), // Add space at the top
+                      const CircleAvatar(
+                        radius: 80,
+                        backgroundImage: AssetImage('assets/login_icon.jpg'), // Make sure this path is correct
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        child: TextFormField(
-                          controller: passwordController,
-                          keyboardType: TextInputType.visiblePassword,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            hintText: 'Password',
-                            labelText: 'Password',
-                            prefixIcon: Icon(Icons.lock),
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (String value) {
-                            password = value;
-                          },
-                          validator: (value) {
-                            return value!.isEmpty ? 'Enter password' : null;
-                          },
+                      const SizedBox(height: 20),
+                      const Text(
+                        'Register',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 30
                         ),
                       ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: rememberMe,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                rememberMe = value ?? false;
-                              });
-                            },
-                          ),
-                          const Text('Remember Me'),
-                        ],
-                      ),
-                      RoundButton(
-                        title: 'Register',
-                        onPress: () async {
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              showSpinner = true;
-                            });
-                            try {
-                              final user = await _auth.createUserWithEmailAndPassword(
-                                email: email.toString().trim(),
-                                password: password.toString().trim(),
-                              );
-                              print('Success');
-                              toastMessage('User Successfully Created');
-                              await _saveRememberMe();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const HomeScreen()),
-                              );
-                              setState(() {
-                                showSpinner = false;
-                              });
-                            } catch (e) {
-                              print(e.toString());
-                              toastMessage(e.toString());
-                              setState(() {
-                                showSpinner = false;
-                              });
-                            }
-                          }
-                        },
-                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text("Already have an account? "),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const LoginScreen(),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'Login',
-                                style: TextStyle(color: Colors.pinkAccent, fontWeight: FontWeight.bold),
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              buildTextFormField(
+                                controller: emailController,
+                                hintText: 'Email',
+                                labelText: 'Email',
+                                icon: Icons.email,
+                                isPassword: false,
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 15),
+                              buildTextFormField(
+                                controller: passwordController,
+                                hintText: 'Password',
+                                labelText: 'Password',
+                                icon: Icons.lock,
+                                isPassword: true,
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: rememberMe,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        rememberMe = value ?? false;
+                                      });
+                                    },
+                                  ),
+                                  const Text('Remember Me', style: TextStyle(
+                                    color: Colors.pinkAccent,
+                                    fontWeight: FontWeight.bold,)),
+                                ],
+                              ),
+                              const SizedBox(height: 10), // Adjust spacing between fields and button
+                              RoundButton(
+                                title: 'Register',
+                                onPress: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    setState(() => showSpinner = true);
+                                    try {
+                                      final user = await _auth.createUserWithEmailAndPassword(
+                                        email: emailController.text.trim(),
+                                        password: passwordController.text.trim(),
+                                      );
+                                      toastMessage('User Successfully Created');
+                                      await _saveRememberMe();
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const HomeScreen()),
+                                      );
+                                    } catch (e) {
+                                      toastMessage(e.toString());
+                                    } finally {
+                                      setState(() => showSpinner = false);
+                                    }
+                                  }
+                                },
+                              ),
+                              const SizedBox(height: 5), // Adjust spacing before login prompt
+                              buildLoginPrompt(context),
+                            ],
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  TextFormField buildTextFormField({
+    required TextEditingController controller,
+    required String hintText,
+    required String labelText,
+    required IconData icon,
+    required bool isPassword,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: isPassword ? TextInputType.visiblePassword : TextInputType.emailAddress,
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        hintText: hintText,
+        labelText: labelText,
+        prefixIcon: Icon(icon, color: Colors.pinkAccent),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+        filled: true,
+        fillColor: Colors.white70,
+      ),
+      validator: (value) => value!.isEmpty ? 'Enter $labelText' : null,
+    );
+  }
+
+  Widget buildLoginPrompt(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Already have an account? ", style: TextStyle(color: Colors.black87)),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+              );
+            },
+            child: const Text(
+              'Login',
+              style: TextStyle(
+                color: Colors.pinkAccent,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

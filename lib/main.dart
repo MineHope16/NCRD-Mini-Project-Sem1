@@ -7,11 +7,11 @@ void main() async {
   try {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyCi8khDIy8TCeR7MjRx_5eT_msLRc2cQoY",
-        projectId: "blog-app-2b9dd",
-        databaseURL: "https://blog-app-2b9dd-default-rtdb.asia-southeast1.firebasedatabase.app/",
-        messagingSenderId: '359744860509',
-        appId: '1:359744860509:android:da0a27fbbc13e0d10e78b4',
+        apiKey: "AIzaSyBzpjOoXleE74wD9gpMkcFA5DWBM0OAg_0",
+        projectId: "ncrd-blog-app",
+        databaseURL: "https://ncrd-blog-app-default-rtdb.firebaseio.com",
+        messagingSenderId: '887656484222',
+        appId: "1:887656484222:android:26685e9067874517daf72f",
       ),
     );
   } catch (e) {
@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),

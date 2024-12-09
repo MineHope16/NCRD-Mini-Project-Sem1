@@ -50,7 +50,7 @@ dependencies:
   path_provider: ^2.0.8
   open_file: ^3.2.1
   permission_handler: ^10.0.0
-  share: ^2.0.4
+#  share: ^2.0.4
   shared_preferences: ^2.0.15
   image_cropper: ^7.1.0
 
@@ -84,6 +84,7 @@ flutter:
     - assets/blog_app.jpg
     - assets/blogging_9611762.png
     - assets/login_icon.jpg
+    - assets/background.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
